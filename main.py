@@ -274,7 +274,7 @@ def main():
                 with st.container():
                     st.markdown("<h3 style='font-size: 18px;'>Application Information</h2>", unsafe_allow_html=True)
                     if st.session_state.selected_stage == 2:
-                        interview_score = st.slider("Interview Score", 50, 100, 50, 1)
+                        interview_score = st.slider("Interview Score", 50, 100, 80, 1)
                     term = st.radio("Term", ["Fall", "Spring"])
                     gpa = st.slider("GPA", 0.0, 4.0, 3.0, 0.01)
                     ales = st.slider("ALES Score", 0, 100, 80)

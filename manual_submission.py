@@ -53,6 +53,8 @@ class NN2_Stage2(nn.Module):
 
 def get_preds(is_boun, is_ie, term, gpa, ales, uni_score, n_of_applicants, interview_score=None):
     if (interview_score is None):
+        if ales < 75:
+            return np.array([0, 1, 0])
         # Create a StandardScaler object and set mean and standard deviation
         scaler = StandardScaler()
         scaler.mean_ = MEAN
