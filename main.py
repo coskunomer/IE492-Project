@@ -3,7 +3,6 @@ import pandas as pd
 from io import StringIO
 from manual_submission import get_preds
 import matplotlib.pyplot as plt
-import plotly.express as px
 
 def visualize_probabilities(probabilities):
     labels = ['Direct Acceptance', 'Direct Rejection', 'Scientific Interview']
