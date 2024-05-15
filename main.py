@@ -2,7 +2,9 @@ import streamlit as st
 import pandas as pd
 from io import StringIO
 from manual_submission import get_preds
+from excel_upload import check_df_requirements, stage1_preds, stage2_preds
 import matplotlib.pyplot as plt
+from io import BytesIO
 
 def visualize_probabilities(probabilities):
     labels = ['Direct Acceptance', 'Direct Rejection', 'Scientific Interview']
@@ -219,26 +221,62 @@ def create_columns():
 
 
 
+
+def highlight_correct_predictions(s):
+    try:
+        return ['background-color: green' if s['actual'] == s['pred'] else 'background-color: red' for _ in s]
+    except:
+        return ['background-color: green' for _ in s]
+
+
+def apply_styling(df):
+    styled_df = df.style.apply(highlight_correct_predictions, axis=1)
+
+    styled_df.set_properties(subset=[col for col in df.columns if col not in ['actual', 'pred']], **{'color': 'black', 'background-color': 'white'})
+    styled_df.set_table_styles([{
+        'selector': 'th',
+        'props': [('border-color', 'black')]
+    }, {
+        'selector': 'td',
+        'props': [('border-color', 'black')]
+    }])
+    return styled_df
+
+
+
 def file_upload_section():
     # File uploader section
     st.header("File Upload")
-    st.write("Please upload the file you want to process.")
+    st.write("Please upload the Excel file you want to process.")
 
-    uploaded_file = st.file_uploader("Choose a file")
+    uploaded_file = st.file_uploader("Choose a file", type=["xlsx"])
 
     if uploaded_file is not None:
-        # To read file as bytes:
-        bytes_data = uploaded_file.getvalue()
-        st.write(bytes_data)
-        # To convert to a string based IO:
-        stringio = StringIO(uploaded_file.getvalue().decode("utf-8"))
-        st.write(stringio)
-        # To read file as string:
-        string_data = stringio.read()
-        st.write(string_data)
-        # Can be used wherever a "file-like" object is accepted:
-        dataframe = pd.read_csv(uploaded_file)
-        st.write(dataframe)
+        # Read file contents as bytes
+        file_contents = uploaded_file.getvalue()
+
+        # Load the bytes into a BytesIO object
+        excel_data = BytesIO(file_contents)
+
+        # Load the BytesIO object into a pandas DataFrame
+        try:
+            df = pd.read_excel(excel_data, decimal=',')
+
+            result = check_df_requirements(df, st.session_state.selected_stage)
+            if result[0]:
+                st.success(f"Upload successful.")
+                if st.session_state.selected_stage == 1:
+                    X = stage1_preds(df)
+                    st.write(apply_styling(X))
+                else:
+                    X = stage2_preds(df)
+                    st.write(apply_styling(X))
+            else:
+                st.error(f"Error: Mng required columns for stage 2: {result[1]}")
+
+
+        except Exception as e:
+            st.error("Error reading Excel file: {}".format(str(e)))
 
 def main():
     set_page_layout()
@@ -366,9 +404,6 @@ def main():
                         st.session_state.preds2 = predictions
                         st.session_state.preds = None
                     st.rerun()
-
-
-
 
         # Right column for file uploader
         with upload_grid[2]:
