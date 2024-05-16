@@ -80,7 +80,7 @@ def stage1_preds(df):
     # Initialize model and load state dict
     model = NN2(0.603)
 
-    model.load_state_dict(torch.load("NN_model.pt", map_location=torch.device('cpu')))
+    model.load_state_dict(torch.load("NN1_new.pt", map_location=torch.device('cpu')))
     st.success(f"NN Model loaded successfully...")
 
     # Get predictions
@@ -140,7 +140,7 @@ def stage2_preds(df):
     # Initialize model and load state dict
     model = NN2_Stage2(0.603)
 
-    model.load_state_dict(torch.load("NN_stage2.pt", map_location=torch.device('cpu')))
+    model.load_state_dict(torch.load("NN2_new.pt", map_location=torch.device('cpu')))
     st.success(f"NN Model loaded successfully...")
 
     # Get predictions

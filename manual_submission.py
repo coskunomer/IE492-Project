@@ -67,7 +67,7 @@ def get_preds(is_boun, is_ie, term, gpa, ales, uni_score, n_of_applicants, inter
 
         # Initialize model and load state dict
         model = NN2(0.603)
-        model.load_state_dict(torch.load("NN_model.pt", map_location=torch.device('cpu')))
+        model.load_state_dict(torch.load("NN1_new.pt", map_location=torch.device('cpu')))
         model.eval()
 
         # Get predictions
@@ -85,7 +85,7 @@ def get_preds(is_boun, is_ie, term, gpa, ales, uni_score, n_of_applicants, inter
         features = scaler.transform(features.reshape(1, -1))
         x = torch.tensor(features, dtype=torch.float32)
         model = NN2_Stage2(0.603)
-        model.load_state_dict(torch.load("NN_stage2.pt", map_location=torch.device('cpu')))
+        model.load_state_dict(torch.load("NN2_new.pt", map_location=torch.device('cpu')))
         model.eval()
         # Get predictions
         with torch.no_grad():

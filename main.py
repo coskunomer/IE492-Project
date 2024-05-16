@@ -5,6 +5,7 @@ from manual_submission import get_preds
 from excel_upload import check_df_requirements, stage1_preds, stage2_preds
 import matplotlib.pyplot as plt
 from io import BytesIO
+from sklearn.metrics import classification_report
 
 def visualize_probabilities(probabilities):
     labels = ['Direct Acceptance', 'Direct Rejection', 'Scientific Interview']
@@ -242,8 +243,6 @@ def apply_styling(df):
     }])
     return styled_df
 
-
-
 def file_upload_section():
     # File uploader section
     st.header("File Upload")
@@ -268,9 +267,11 @@ def file_upload_section():
                 if st.session_state.selected_stage == 1:
                     X = stage1_preds(df)
                     st.write(apply_styling(X))
+
                 else:
                     X = stage2_preds(df)
                     st.write(apply_styling(X))
+
             else:
                 st.error(f"Error: Mng required columns for stage 2: {result[1]}")
 
