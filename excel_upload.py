@@ -2,16 +2,7 @@ import numpy as np
 import pandas as pd
 import streamlit as st
 from sklearn.preprocessing import StandardScaler
-from sklearn.model_selection import train_test_split, cross_val_score, KFold
-from sklearn.preprocessing import StandardScaler
 import torch
-import torch.nn as nn
-import torch.optim as optim
-from torch.utils.data import DataLoader, TensorDataset
-import matplotlib.pyplot as plt
-import torch.nn.functional as F
-import hyperopt
-from hyperopt import fmin, hp, Trials
 from manual_submission import NN2, NN2_Stage2
 import torch.cuda
 

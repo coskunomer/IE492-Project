@@ -1,11 +1,9 @@
 import streamlit as st
 import pandas as pd
-from io import StringIO
 from manual_submission import get_preds
 from excel_upload import check_df_requirements, stage1_preds, stage2_preds
 import matplotlib.pyplot as plt
 from io import BytesIO
-from sklearn.metrics import classification_report
 
 def visualize_probabilities(probabilities):
     labels = ['Direct Acceptance', 'Direct Rejection', 'Scientific Interview']
@@ -221,8 +219,6 @@ def create_columns():
                 st.rerun()
 
 
-
-
 def highlight_correct_predictions(s):
     try:
         return ['background-color: green' if s['actual'] == s['pred'] else 'background-color: red' for _ in s]
@@ -232,7 +228,6 @@ def highlight_correct_predictions(s):
 
 def apply_styling(df):
     styled_df = df.style.apply(highlight_correct_predictions, axis=1)
-
     styled_df.set_properties(subset=[col for col in df.columns if col not in ['actual', 'pred']], **{'color': 'black', 'background-color': 'white'})
     styled_df.set_table_styles([{
         'selector': 'th',
